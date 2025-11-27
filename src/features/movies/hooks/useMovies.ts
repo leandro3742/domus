@@ -26,12 +26,17 @@ export const useFilteredMovies = () => {
     yearTo: null,
     genre: [],
   });
-  const [genreOptions, setGenreOptions] = useState<string[]>([]);
+  
   const query = useMovies();
+
+  const genreOptions = useMemo(() => {
+    const allMovies = query.data?.pages.flatMap(page => page.data) || [];
+    return Array.from(new Set(allMovies.flatMap(movie => movie.Genre.split(', '))));
+  }, [query.data]);
 
   const movies = useMemo(() => {
     const allMovies = query.data?.pages.flatMap(page => page.data) || [];
-    setGenreOptions(Array.from(new Set(allMovies.flatMap(movie => movie.Genre.split(', ')))));
+    
     return allMovies.filter(movie => {
       const matchesTitle = !filters.title || movie.Title.toLowerCase().includes(filters.title.toLowerCase());
       const matchesYear = filters.yearFrom && filters.yearTo ? (movie.Year >= filters.yearFrom && movie.Year <= filters.yearTo) : true;

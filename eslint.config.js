@@ -18,7 +18,9 @@ export default defineConfig([
       reactRefresh.configs.vite,
       prettierConfig,
     ],
-    plugins: ['prettier'],
+    plugins: {
+      prettier,
+    },
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,

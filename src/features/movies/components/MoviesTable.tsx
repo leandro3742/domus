@@ -98,7 +98,7 @@ export const MoviesTable: React.FC<MoviesTableProps> = ({
         fetchNextPage();
       }
     }
-  }, [movies]);
+  }, [movies, isLoading, isLoadingMore, fetchNextPage]);
 
   if (isLoading) {
     return (
