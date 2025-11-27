@@ -1,0 +1,37 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-push checks..."
+
+# Run TypeScript type checking (faster than full build)
+echo "📝 Checking TypeScript types..."
+npx tsc --noEmit
+if [ $? -ne 0 ]; then
+    echo "❌ TypeScript type checking failed. Please fix type errors before pushing."
+    exit 1
+fi
+
+# Store current git state to detect changes
+echo "🔧 Running ESLint with auto-fix..."
+BEFORE_FIX=$(git status --porcelain)
+npm run lint:fix
+AFTER_FIX=$(git status --porcelain)
+
+# Check if any files were modified by the fix
+if [ "$BEFORE_FIX" != "$AFTER_FIX" ]; then
+    echo "📁 ESLint fixed some issues. Adding fixed files to commit..."
+    # Only add files that were actually modified by ESLint
+    git add -u
+    echo "⚠️  Fixed files were added. Please run git push again."
+    exit 1
+fi
+
+# Final ESLint check to ensure no remaining errors
+echo "✅ Running final ESLint check..."
+npm run lint
+if [ $? -ne 0 ]; then
+    echo "❌ ESLint found errors that couldn't be auto-fixed. Please fix them manually."
+    exit 1
+fi
+
+echo "✅ All checks passed. Ready to push!"
