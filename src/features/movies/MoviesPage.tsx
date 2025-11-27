@@ -1,23 +1,24 @@
 import React from 'react';
-import { useInfiniteMovies } from './hooks/useMovies';
+import { useFilteredMovies } from './hooks/useMovies';
 import { MoviesTable } from './components/MoviesTable';
 import { MoviesError } from './components/MoviesError';
 import { MoviesLoadingSkeleton } from './components/MoviesLoadingSkeleton';
 import { MoviesHeader } from './components/MoviesHeader';
+import { MoviesFilters } from './components/MoviesFilters';
 
-export const MoviesPage: React.FC = () => {  
+export const MoviesPage: React.FC = () => {
   const { 
-    data, 
+    movies,
+    filters,
+    setFilters,
     isLoading, 
     isError, 
     error,
     fetchNextPage,
     hasNextPage,
-    isFetchingNextPage
-  } = useInfiniteMovies({ 
-    enabled: true
-  });
-
+    isFetchingNextPage,
+    genreOptions
+  } = useFilteredMovies();
 
   if (isError) {
     return <MoviesError error={error} />;
@@ -38,12 +39,15 @@ export const MoviesPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <MoviesHeader />
 
-        <div className="bg-white shadow rounded-lg overflow-hidden">
+        <MoviesFilters onFilterChange={setFilters} initialFilters={filters} genreOptions={genreOptions} />
+
+        <div className='bg-white shadow rounded-lg'>
           <div className="px-4 py-5 sm:p-6">
             <MoviesTable 
-              movies={data?.pages.flatMap(page => page.data) || []} 
+              movies={movies} 
               isLoading={isLoading}
               isLoadingMore={isFetchingNextPage}
+              fetchNextPage={fetchNextPage}
             />
           </div>
 

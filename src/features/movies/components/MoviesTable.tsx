@@ -12,12 +12,14 @@ interface MoviesTableProps {
   movies: Movie[];
   isLoading?: boolean;
   isLoadingMore?: boolean;
+  fetchNextPage: () => void;
 }
 
 export const MoviesTable: React.FC<MoviesTableProps> = ({
   movies,
   isLoading,
   isLoadingMore,
+  fetchNextPage,
 }) => {
   const columns: ColumnDef<Movie>[] = React.useMemo(
     () => [
@@ -74,6 +76,30 @@ export const MoviesTable: React.FC<MoviesTableProps> = ({
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const tableContainerRef = React.useRef<HTMLDivElement>(null);
+
+  const handleScroll = () => {
+    const container = tableContainerRef.current;
+    if (container) {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
+
+      if (scrollPercentage >= 0.7 && !isLoadingMore) {
+        fetchNextPage()
+      }
+    }
+  };
+
+  React.useEffect(() => {
+    const container = tableContainerRef.current;
+    if (container && !isLoading && !isLoadingMore) {
+      const { scrollHeight, clientHeight } = container;
+      if (scrollHeight <= clientHeight) {
+        fetchNextPage();
+      }
+    }
+  }, [movies]);
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-8">
@@ -83,9 +109,13 @@ export const MoviesTable: React.FC<MoviesTableProps> = ({
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div 
+      ref={tableContainerRef}
+      onScroll={handleScroll}
+      className="overflow-x-auto overflow-y-auto max-h-[70vh]"
+    >
       <table className="min-w-full bg-white border border-gray-200">
-        <thead className="bg-gray-50">
+        <thead className="bg-gray-50 sticky top-0 z-10 shadow-sm">
           {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map(header => (

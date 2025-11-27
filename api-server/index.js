@@ -27,7 +27,7 @@ app.get('/api/movies/search', (req, res) => {
       total_pages: totalPages,
       data,
     });
-  }, 5000);
+  }, 1000);
 });
 
 app.get('/', (req, res) => {

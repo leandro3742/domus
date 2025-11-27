@@ -2,7 +2,7 @@ import { httpClient } from './httpClient';
 
 export interface Movie {
   Title: string;
-  Year: string;
+  Year: number;
   Rated: string;
   Released: string;
   Runtime: string;

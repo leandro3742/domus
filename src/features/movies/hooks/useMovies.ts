@@ -1,30 +1,9 @@
-import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { moviesApi } from '../../../core/api/moviesApi';
+import { useState, useMemo } from 'react';
+import type { MoviesFiltersState } from '../types';
 
-interface UseMoviesOptions {
-  page?: number;
-  enabled?: boolean;
-}
-
-export const useMovies = ({
-  page = 1,
-  enabled = true,
-}: UseMoviesOptions = {}) => {
-  return useQuery({
-    queryKey: ['movies', page],
-    queryFn: () => moviesApi.searchMovies(page),
-    enabled,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-  });
-};
-
-interface UseInfiniteMoviesOptions {
-  enabled?: boolean;
-}
-
-export const useInfiniteMovies = ({
-  enabled = true,
-}: UseInfiniteMoviesOptions = {}) => {
+const useMovies = () => {
   return useInfiniteQuery({
     queryKey: ['movies', 'infinite'],
     queryFn: ({ pageParam = 1 }) => moviesApi.searchMovies(pageParam),
@@ -35,7 +14,40 @@ export const useInfiniteMovies = ({
       }
       return undefined;
     },
-    enabled,
+    enabled: true,
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 };
+
+export const useFilteredMovies = () => {
+  const [filters, setFilters] = useState<MoviesFiltersState>({
+    title: '',
+    yearFrom: null,
+    yearTo: null,
+    genre: [],
+  });
+  const [genreOptions, setGenreOptions] = useState<string[]>([]);
+  const query = useMovies();
+
+  const movies = useMemo(() => {
+    const allMovies = query.data?.pages.flatMap(page => page.data) || [];
+    setGenreOptions(Array.from(new Set(allMovies.flatMap(movie => movie.Genre.split(', ')))));
+    return allMovies.filter(movie => {
+      const matchesTitle = !filters.title || movie.Title.toLowerCase().includes(filters.title.toLowerCase());
+      const matchesYear = filters.yearFrom && filters.yearTo ? (movie.Year >= filters.yearFrom && movie.Year <= filters.yearTo) : true;
+      const matchesGenre = filters.genre.length === 0 || filters.genre.some((g: string) => 
+        movie.Genre.toLowerCase().includes(g.toLowerCase())
+      );
+      return matchesTitle && matchesYear && matchesGenre;
+    });
+  }, [query.data, filters]);
+
+  return {
+    ...query,
+    movies,
+    filters,
+    setFilters,
+    genreOptions
+  };
+};
+
