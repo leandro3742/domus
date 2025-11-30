@@ -81,11 +81,11 @@ export const RangeSlider: React.FC<RangeSliderProps> = ({
         />
 
         {/* Thumbs visuales (falsos) para mejor control visual */}
-        <div 
+        <div
           className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-blue-600 rounded-full pointer-events-none z-10"
           style={{ left: `calc(${fromPercent}% - 8px)` }}
         />
-        <div 
+        <div
           className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-blue-600 rounded-full pointer-events-none z-10"
           style={{ left: `calc(${toPercent}% - 8px)` }}
         />

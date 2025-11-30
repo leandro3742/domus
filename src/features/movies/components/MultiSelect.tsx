@@ -20,7 +20,10 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -63,7 +66,7 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
             >
               {value}
               <button
-                onClick={(e) => removeOption(e, value)}
+                onClick={e => removeOption(e, value)}
                 className="hover:text-blue-600 focus:outline-none"
               >
                 ×
@@ -75,15 +78,19 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
 
       {isOpen && (
         <div className="absolute z-50 w-full mt-1 bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-          {options.map((option) => (
+          {options.map(option => (
             <div
               key={option}
               className={`cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-blue-50 ${
-                selected.includes(option) ? 'bg-blue-50 text-blue-900' : 'text-gray-900'
+                selected.includes(option)
+                  ? 'bg-blue-50 text-blue-900'
+                  : 'text-gray-900'
               }`}
               onClick={() => handleSelect(option)}
             >
-              <span className={`block truncate ${selected.includes(option) ? 'font-semibold' : 'font-normal'}`}>
+              <span
+                className={`block truncate ${selected.includes(option) ? 'font-semibold' : 'font-normal'}`}
+              >
                 {option}
               </span>
               {selected.includes(option) && (

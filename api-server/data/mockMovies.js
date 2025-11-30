@@ -1,4 +1,3 @@
-
 const mockMovies = [
   {
     Title: 'The Shawshank Redemption',

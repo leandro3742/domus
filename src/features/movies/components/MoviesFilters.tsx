@@ -13,13 +13,22 @@ interface MoviesFiltersProps {
 
 export const MoviesFilters: React.FC<MoviesFiltersProps> = ({
   onFilterChange,
-  initialFilters = { title: '', yearFrom: null, yearTo: null, genre: [], director: '' },
+  initialFilters = {
+    title: '',
+    yearFrom: null,
+    yearTo: null,
+    genre: [],
+    director: '',
+  },
   genreOptions,
   directorOptions,
   // yearRange,
 }) => {
   const [filters, setFilters] = useState<MoviesFiltersState>(initialFilters);
-  const [yearRange, setYearRange] = useState<Range<number>>({ from: 1900, to: 2024 });
+  const [yearRange, setYearRange] = useState<Range<number>>({
+    from: 1900,
+    to: 2024,
+  });
   // const [geatr]
   // Debounce the filter changes to avoid too many API calls
   useEffect(() => {
@@ -65,7 +74,10 @@ export const MoviesFilters: React.FC<MoviesFiltersProps> = ({
       <h3 className="text-lg font-medium text-gray-900 mb-4">Filtros</h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="title"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Título
           </label>
           <input
@@ -78,7 +90,7 @@ export const MoviesFilters: React.FC<MoviesFiltersProps> = ({
             className="focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md shadow-sm p-2 border"
           />
         </div>
-        
+
         <div>
           <RangeSlider
             label="Año (desde / hasta)"
@@ -105,7 +117,7 @@ export const MoviesFilters: React.FC<MoviesFiltersProps> = ({
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Director
           </label>
-          <DirectorFilter 
+          <DirectorFilter
             directors={directorOptions}
             selectedDirector={filters.director}
             onDirectorChange={handleDirectorChange}

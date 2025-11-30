@@ -69,7 +69,7 @@ export const MoviesTable: React.FC<MoviesTableProps> = ({
           <button
             type="button"
             className="px-3 py-1 text-xs font-medium text-blue-600 border border-blue-600 rounded hover:bg-blue-50"
-            onClick={(e) => {
+            onClick={e => {
               e.stopPropagation();
               setSelectedMovie(row.original);
               setOpenModal(true);
@@ -88,7 +88,7 @@ export const MoviesTable: React.FC<MoviesTableProps> = ({
       //   },
       // },
     ],
-    []
+    [setSelectedMovie, setOpenModal]
   );
 
   const table = useReactTable({
@@ -106,7 +106,7 @@ export const MoviesTable: React.FC<MoviesTableProps> = ({
       const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
 
       if (scrollPercentage >= 0.7 && !isLoadingMore) {
-        fetchNextPage()
+        fetchNextPage();
       }
     }
   };
@@ -130,7 +130,7 @@ export const MoviesTable: React.FC<MoviesTableProps> = ({
   }
 
   return (
-    <div 
+    <div
       ref={tableContainerRef}
       onScroll={handleScroll}
       className="overflow-x-auto overflow-y-auto max-h-[70vh]"
@@ -168,7 +168,7 @@ export const MoviesTable: React.FC<MoviesTableProps> = ({
               ))}
             </tr>
           ))}
-          
+
           {isLoadingMore && <MoviesIsLoadingMoreSkeleton />}
         </tbody>
       </table>

@@ -1,12 +1,8 @@
-import { MoviesPage } from './features/movies';
 import './App.css';
+import { AppRouter } from './app/router';
 
 function App() {
-  return (
-    <div className="App">
-      <MoviesPage />
-    </div>
-  );
+  return <AppRouter />;
 }
 
 export default App;

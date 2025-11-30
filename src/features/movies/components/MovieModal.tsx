@@ -7,9 +7,11 @@ interface MovieModalProps {
   onClose: () => void;
 }
 
-export const MovieModal: React.FC<MovieModalProps> = ({ movie, isOpen, onClose }) => {
-  if (!isOpen || !movie) return null;
-
+export const MovieModal: React.FC<MovieModalProps> = ({
+  movie,
+  isOpen,
+  onClose,
+}) => {
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       onClose();
@@ -17,6 +19,8 @@ export const MovieModal: React.FC<MovieModalProps> = ({ movie, isOpen, onClose }
   };
 
   React.useEffect(() => {
+    if (!isOpen) return;
+
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
@@ -25,7 +29,9 @@ export const MovieModal: React.FC<MovieModalProps> = ({ movie, isOpen, onClose }
 
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
-  }, [onClose]);
+  }, [isOpen, onClose]);
+
+  if (!isOpen || !movie) return null;
 
   return (
     <div
@@ -49,19 +55,25 @@ export const MovieModal: React.FC<MovieModalProps> = ({ movie, isOpen, onClose }
               <h3 className="text-sm font-medium text-gray-500 mb-1">Año</h3>
               <p className="text-gray-900">{movie.Year}</p>
             </div>
-            
+
             <div>
-              <h3 className="text-sm font-medium text-gray-500 mb-1">Clasificación</h3>
+              <h3 className="text-sm font-medium text-gray-500 mb-1">
+                Clasificación
+              </h3>
               <p className="text-gray-900">{movie.Rated}</p>
             </div>
 
             <div>
-              <h3 className="text-sm font-medium text-gray-500 mb-1">Estreno</h3>
+              <h3 className="text-sm font-medium text-gray-500 mb-1">
+                Estreno
+              </h3>
               <p className="text-gray-900">{movie.Released}</p>
             </div>
 
             <div>
-              <h3 className="text-sm font-medium text-gray-500 mb-1">Duración</h3>
+              <h3 className="text-sm font-medium text-gray-500 mb-1">
+                Duración
+              </h3>
               <p className="text-gray-900">{movie.Runtime}</p>
             </div>
 
@@ -71,7 +83,9 @@ export const MovieModal: React.FC<MovieModalProps> = ({ movie, isOpen, onClose }
             </div>
 
             <div>
-              <h3 className="text-sm font-medium text-gray-500 mb-1">Director</h3>
+              <h3 className="text-sm font-medium text-gray-500 mb-1">
+                Director
+              </h3>
               <p className="text-gray-900">{movie.Director}</p>
             </div>
           </div>

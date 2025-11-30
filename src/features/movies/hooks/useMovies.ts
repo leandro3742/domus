@@ -27,29 +27,40 @@ export const useFilteredMovies = () => {
     genre: [],
     director: '',
   });
-  
+
   const query = useMovies();
 
   const genreOptions = useMemo(() => {
     const allMovies = query.data?.pages.flatMap(page => page.data) || [];
-    return Array.from(new Set(allMovies.flatMap(movie => movie.Genre.split(', '))));
+    return Array.from(
+      new Set(allMovies.flatMap(movie => movie.Genre.split(', ')))
+    );
   }, [query.data]);
 
   const directorOptions = useMemo(() => {
     const allMovies = query.data?.pages.flatMap(page => page.data) || [];
     return Array.from(new Set(allMovies.flatMap(movie => movie.Director)));
   }, [query.data]);
-  
+
   const movies = useMemo(() => {
     const allMovies = query.data?.pages.flatMap(page => page.data) || [];
-    
+
     return allMovies.filter(movie => {
-      const matchesTitle = !filters.title || movie.Title.toLowerCase().includes(filters.title.toLowerCase());
-      const matchesYear = filters.yearFrom && filters.yearTo ? (movie.Year >= filters.yearFrom && movie.Year <= filters.yearTo) : true;
-      const matchesGenre = filters.genre.length === 0 || filters.genre.some((g: string) => 
-        movie.Genre.toLowerCase().includes(g.toLowerCase())
-      );
-      const matchesDirector = !filters.director || movie.Director.toLowerCase().includes(filters.director.toLowerCase());
+      const matchesTitle =
+        !filters.title ||
+        movie.Title.toLowerCase().includes(filters.title.toLowerCase());
+      const matchesYear =
+        filters.yearFrom && filters.yearTo
+          ? movie.Year >= filters.yearFrom && movie.Year <= filters.yearTo
+          : true;
+      const matchesGenre =
+        filters.genre.length === 0 ||
+        filters.genre.some((g: string) =>
+          movie.Genre.toLowerCase().includes(g.toLowerCase())
+        );
+      const matchesDirector =
+        !filters.director ||
+        movie.Director.toLowerCase().includes(filters.director.toLowerCase());
       return matchesTitle && matchesYear && matchesGenre && matchesDirector;
     });
   }, [query.data, filters]);
@@ -60,7 +71,6 @@ export const useFilteredMovies = () => {
     filters,
     setFilters,
     genreOptions,
-    directorOptions
+    directorOptions,
   };
 };
-
