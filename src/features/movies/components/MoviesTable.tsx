@@ -13,6 +13,8 @@ interface MoviesTableProps {
   isLoading?: boolean;
   isLoadingMore?: boolean;
   fetchNextPage: () => void;
+  setSelectedMovie: (movie: Movie | null) => void;
+  setOpenModal: (open: boolean) => void;
 }
 
 export const MoviesTable: React.FC<MoviesTableProps> = ({
@@ -20,6 +22,8 @@ export const MoviesTable: React.FC<MoviesTableProps> = ({
   isLoading,
   isLoadingMore,
   fetchNextPage,
+  setSelectedMovie,
+  setOpenModal,
 }) => {
   const columns: ColumnDef<Movie>[] = React.useMemo(
     () => [
@@ -28,21 +32,21 @@ export const MoviesTable: React.FC<MoviesTableProps> = ({
         header: 'Título',
         cell: info => info.getValue(),
       },
-      {
-        accessorKey: 'Year',
-        header: 'Año',
-        cell: info => info.getValue(),
-      },
+      // {
+      //   accessorKey: 'Year',
+      //   header: 'Año',
+      //   cell: info => info.getValue(),
+      // },
       {
         accessorKey: 'Rated',
         header: 'Clasificación',
         cell: info => info.getValue(),
       },
-      {
-        accessorKey: 'Released',
-        header: 'Estreno',
-        cell: info => info.getValue(),
-      },
+      // {
+      //   accessorKey: 'Released',
+      //   header: 'Estreno',
+      //   cell: info => info.getValue(),
+      // },
       {
         accessorKey: 'Runtime',
         header: 'Duración',
@@ -59,13 +63,30 @@ export const MoviesTable: React.FC<MoviesTableProps> = ({
         cell: info => info.getValue(),
       },
       {
-        accessorKey: 'Actors',
-        header: 'Actores',
-        cell: info => {
-          const actors = info.getValue() as string;
-          return actors.length > 50 ? `${actors.substring(0, 50)}...` : actors;
-        },
+        accessorKey: 'action',
+        header: 'Acciones',
+        cell: ({ row }) => (
+          <button
+            type="button"
+            className="px-3 py-1 text-xs font-medium text-blue-600 border border-blue-600 rounded hover:bg-blue-50"
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedMovie(row.original);
+              setOpenModal(true);
+            }}
+          >
+            Ver más
+          </button>
+        ),
       },
+      // {
+      //   accessorKey: 'Actors',
+      //   header: 'Actores',
+      //   cell: info => {
+      //     const actors = info.getValue() as string;
+      //     return actors.length > 50 ? `${actors.substring(0, 50)}...` : actors;
+      //   },
+      // },
     ],
     []
   );

@@ -16,6 +16,17 @@ export const MoviesLoadingSkeleton: React.FC = () => {
               <div className="h-4 bg-gray-200 rounded w-1/6"></div>
             </div>
 
+            {/* Table header skeleton */}
+            <div className="mb-4 border-b border-gray-200 pb-3">
+              <div className="flex items-center space-x-4">
+                <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+                <div className="h-4 bg-gray-200 rounded w-1/6"></div>
+                <div className="h-4 bg-gray-200 rounded w-1/6"></div>
+                <div className="h-4 bg-gray-200 rounded w-1/5"></div>
+                <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+              </div>
+            </div>
+
             {/* Table rows skeleton */}
             <div className="space-y-3">
               {[...Array(5)].map((_, index) => (

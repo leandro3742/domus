@@ -5,6 +5,8 @@ import { MoviesError } from './components/MoviesError';
 import { MoviesLoadingSkeleton } from './components/MoviesLoadingSkeleton';
 import { MoviesHeader } from './components/MoviesHeader';
 import { MoviesFilters } from './components/MoviesFilters';
+import type { Movie } from '../../core/api/moviesApi';
+import { MovieModal } from './components/MovieModal';
 
 export const MoviesPage: React.FC = () => {
   const { 
@@ -21,6 +23,9 @@ export const MoviesPage: React.FC = () => {
     directorOptions
   } = useFilteredMovies();
 
+  const [openModal, setOpenModal] = React.useState(false);
+  const [selectedMovie, setSelectedMovie] = React.useState<Movie | null>(null);
+  
   if (isError) {
     return <MoviesError error={error} />;
   }
@@ -39,7 +44,7 @@ export const MoviesPage: React.FC = () => {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <MoviesHeader />
-
+        <MovieModal movie={selectedMovie} isOpen={openModal} onClose={() => setOpenModal(false)} />
         <MoviesFilters directorOptions={directorOptions} onFilterChange={setFilters} initialFilters={filters} genreOptions={genreOptions} />
 
         <div className='bg-white shadow rounded-lg'>
@@ -49,6 +54,8 @@ export const MoviesPage: React.FC = () => {
               isLoading={isLoading}
               isLoadingMore={isFetchingNextPage}
               fetchNextPage={fetchNextPage}
+              setSelectedMovie={setSelectedMovie}
+              setOpenModal={setOpenModal}
             />
           </div>
 
