@@ -2,17 +2,20 @@ import React, { useState, useEffect } from 'react';
 import type { MoviesFiltersState, Range } from '../types';
 import { MultiSelect } from './MultiSelect';
 import { RangeSlider } from './YearRangeSlider';
+import DirectorFilter from './DirectorFilter';
 
 interface MoviesFiltersProps {
   onFilterChange: (filters: MoviesFiltersState) => void;
   initialFilters?: MoviesFiltersState;
   genreOptions: string[];
+  directorOptions: string[];
 }
 
 export const MoviesFilters: React.FC<MoviesFiltersProps> = ({
   onFilterChange,
-  initialFilters = { title: '', yearFrom: null, yearTo: null, genre: [] },
+  initialFilters = { title: '', yearFrom: null, yearTo: null, genre: [], director: '' },
   genreOptions,
+  directorOptions,
   // yearRange,
 }) => {
   const [filters, setFilters] = useState<MoviesFiltersState>(initialFilters);
@@ -47,6 +50,13 @@ export const MoviesFilters: React.FC<MoviesFiltersProps> = ({
     setFilters(prev => ({
       ...prev,
       genre: selectedGenres,
+    }));
+  };
+
+  const handleDirectorChange = (director: string) => {
+    setFilters(prev => ({
+      ...prev,
+      director,
     }));
   };
 
@@ -88,6 +98,17 @@ export const MoviesFilters: React.FC<MoviesFiltersProps> = ({
             selected={filters.genre}
             onChange={handleGenreChange}
             placeholder="Seleccionar géneros..."
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Director
+          </label>
+          <DirectorFilter 
+            directors={directorOptions}
+            selectedDirector={filters.director}
+            onDirectorChange={handleDirectorChange}
           />
         </div>
       </div>

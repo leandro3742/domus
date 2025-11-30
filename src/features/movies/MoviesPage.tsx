@@ -17,7 +17,8 @@ export const MoviesPage: React.FC = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    genreOptions
+    genreOptions,
+    directorOptions
   } = useFilteredMovies();
 
   if (isError) {
@@ -39,7 +40,7 @@ export const MoviesPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <MoviesHeader />
 
-        <MoviesFilters onFilterChange={setFilters} initialFilters={filters} genreOptions={genreOptions} />
+        <MoviesFilters directorOptions={directorOptions} onFilterChange={setFilters} initialFilters={filters} genreOptions={genreOptions} />
 
         <div className='bg-white shadow rounded-lg'>
           <div className="px-4 py-5 sm:p-6">

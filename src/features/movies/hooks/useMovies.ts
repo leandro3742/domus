@@ -25,6 +25,7 @@ export const useFilteredMovies = () => {
     yearFrom: null,
     yearTo: null,
     genre: [],
+    director: '',
   });
   
   const query = useMovies();
@@ -34,6 +35,11 @@ export const useFilteredMovies = () => {
     return Array.from(new Set(allMovies.flatMap(movie => movie.Genre.split(', '))));
   }, [query.data]);
 
+  const directorOptions = useMemo(() => {
+    const allMovies = query.data?.pages.flatMap(page => page.data) || [];
+    return Array.from(new Set(allMovies.flatMap(movie => movie.Director)));
+  }, [query.data]);
+  
   const movies = useMemo(() => {
     const allMovies = query.data?.pages.flatMap(page => page.data) || [];
     
@@ -43,7 +49,8 @@ export const useFilteredMovies = () => {
       const matchesGenre = filters.genre.length === 0 || filters.genre.some((g: string) => 
         movie.Genre.toLowerCase().includes(g.toLowerCase())
       );
-      return matchesTitle && matchesYear && matchesGenre;
+      const matchesDirector = !filters.director || movie.Director.toLowerCase().includes(filters.director.toLowerCase());
+      return matchesTitle && matchesYear && matchesGenre && matchesDirector;
     });
   }, [query.data, filters]);
 
@@ -52,7 +59,8 @@ export const useFilteredMovies = () => {
     movies,
     filters,
     setFilters,
-    genreOptions
+    genreOptions,
+    directorOptions
   };
 };
 
