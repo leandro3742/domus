@@ -70,10 +70,10 @@ export const MoviesFilters: React.FC<MoviesFiltersProps> = ({
   };
 
   return (
-    <div className="bg-white shadow rounded-lg p-4 mb-6">
+    <div className="bg-white shadow rounded-lg px-4 py-4 sm:px-6 sm:py-5 mb-6">
       <h3 className="text-lg font-medium text-gray-900 mb-4">Filtros</h3>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="flex flex-col space-y-1">
           <label
             htmlFor="title"
             className="block text-sm font-medium text-gray-700 mb-1"
@@ -91,7 +91,7 @@ export const MoviesFilters: React.FC<MoviesFiltersProps> = ({
           />
         </div>
 
-        <div>
+        <div className="flex flex-col space-y-1">
           <RangeSlider
             label="Año (desde / hasta)"
             // min={yearRange.from}

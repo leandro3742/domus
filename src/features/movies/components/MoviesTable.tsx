@@ -12,6 +12,7 @@ interface MoviesTableProps {
   movies: Movie[];
   isLoading?: boolean;
   isLoadingMore?: boolean;
+  hasNextPage: boolean;
   fetchNextPage: () => void;
   setSelectedMovie: (movie: Movie | null) => void;
   setOpenModal: (open: boolean) => void;
@@ -21,6 +22,7 @@ export const MoviesTable: React.FC<MoviesTableProps> = ({
   movies,
   isLoading,
   isLoadingMore,
+  hasNextPage,
   fetchNextPage,
   setSelectedMovie,
   setOpenModal,
@@ -37,21 +39,21 @@ export const MoviesTable: React.FC<MoviesTableProps> = ({
       //   header: 'Año',
       //   cell: info => info.getValue(),
       // },
-      {
-        accessorKey: 'Rated',
-        header: 'Clasificación',
-        cell: info => info.getValue(),
-      },
+      // {
+      //   accessorKey: 'Rated',
+      //   header: 'Clasificación',
+      //   cell: info => info.getValue(),
+      // },
       // {
       //   accessorKey: 'Released',
       //   header: 'Estreno',
       //   cell: info => info.getValue(),
       // },
-      {
-        accessorKey: 'Runtime',
-        header: 'Duración',
-        cell: info => info.getValue(),
-      },
+      // {
+      //   accessorKey: 'Runtime',
+      //   header: 'Duración',
+      //   cell: info => info.getValue(),
+      // },
       {
         accessorKey: 'Genre',
         header: 'Género',
@@ -105,26 +107,26 @@ export const MoviesTable: React.FC<MoviesTableProps> = ({
       const { scrollTop, scrollHeight, clientHeight } = container;
       const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
 
-      if (scrollPercentage >= 0.7 && !isLoadingMore) {
+      if (scrollPercentage >= 0.7 && !isLoadingMore && hasNextPage) {
         fetchNextPage();
       }
     }
   };
 
-  React.useEffect(() => {
-    const container = tableContainerRef.current;
-    if (container && !isLoading && !isLoadingMore) {
-      const { scrollHeight, clientHeight } = container;
-      if (scrollHeight <= clientHeight) {
-        fetchNextPage();
-      }
-    }
-  }, [movies, isLoading, isLoadingMore, fetchNextPage]);
-
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  if (!isLoading && movies.length === 0) {
+    return (
+      <div className="flex justify-center items-center py-8">
+        <p className="text-sm text-gray-500">
+          No hay películas para mostrar con los filtros actuales.
+        </p>
       </div>
     );
   }
@@ -136,7 +138,7 @@ export const MoviesTable: React.FC<MoviesTableProps> = ({
       className="overflow-x-auto overflow-y-auto max-h-[70vh]"
     >
       <table className="min-w-full bg-white border border-gray-200">
-        <thead className="bg-gray-50 sticky top-0 z-10 shadow-sm">
+        <thead className="bg-gray-50 sticky top-0 z-2 shadow-sm">
           {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map(header => (
@@ -169,7 +171,7 @@ export const MoviesTable: React.FC<MoviesTableProps> = ({
             </tr>
           ))}
 
-          {isLoadingMore && <MoviesIsLoadingMoreSkeleton />}
+          {hasNextPage && isLoadingMore && <MoviesIsLoadingMoreSkeleton />}
         </tbody>
       </table>
     </div>

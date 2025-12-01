@@ -1,6 +1,7 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { useDirectors } from './hooks/useDirectors';
 import { DirectorsLoadingSkeleton } from './components/DirectorsLoadingSkeleton';
+import { DirectorsHeader } from './components/DirectorsHeader';
 
 export const Directors: React.FC = () => {
   const [threshold, setThreshold] = useState(0);
@@ -40,14 +41,7 @@ export const Directors: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-6">
-        <header className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-2">
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
-            Directores
-          </h1>
-          <p className="text-xs sm:text-sm text-gray-500">
-            Filtra y visualiza los directores por cantidad de películas.
-          </p>
-        </header>
+        <DirectorsHeader />
 
         <section className="bg-white shadow rounded-lg w-full">
           <form
