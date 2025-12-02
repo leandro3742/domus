@@ -19,7 +19,7 @@ app.get('/api/movies/search', (req, res) => {
   const data = mockMovies.slice(startIndex, endIndex);
 
   // Simulate 2-second delay
-  setTimeout(() => {
+  // setTimeout(() => {
     res.json({
       page,
       per_page: perPage,
@@ -27,7 +27,7 @@ app.get('/api/movies/search', (req, res) => {
       total_pages: totalPages,
       data,
     });
-  }, 2000);
+  // }, 2000);
 });
 
 app.get('/', (req, res) => {
